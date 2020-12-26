@@ -20,8 +20,8 @@ variables:
   environmentName: 'internshipApp'
 
   # Project root folder. Point to the folder containing manage.py file.
-  # projectRoot: $(System.DefaultWorkingDirectory)
-  projectRoot: 'sample-flask-app'
+  projectRoot: $(System.DefaultWorkingDirectory)
+  #projectRoot: 'sample-flask-app'
   
   # Python version: 3.7
   pythonVersion: '3.7'
@@ -51,7 +51,7 @@ stages:
     - script: |
         pip install pytest
         pip install pytest-cov
-        pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
+        python -m pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
       displayName: 'Test with pytest'
         
     - task: ArchiveFiles@2
