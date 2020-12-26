@@ -16,7 +16,6 @@ def client(app):
 def test_index(app, client):
     res = client.get('/')
     assert res.status_code == 200
-    expected = "Hello daksh jain"
-    assert expected == json.loads(res.get_data(as_text=False))
+    assert b"hello daksh jain" in response.data
 
 
