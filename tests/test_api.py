@@ -16,6 +16,6 @@ def client(app):
 def test_index(app, client):
     res = client.get('/')
     assert res.status_code == 200
-    assert b"hello daksh jain" in res.data
+    assert b"Hello daksh jain" in res.data
 
 
