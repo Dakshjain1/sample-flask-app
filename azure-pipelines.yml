@@ -48,12 +48,32 @@ stages:
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
     
+- stage: Test
+  displayName: Test stage
+  jobs:
+  - job: TestJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    
     - script: |
         pip install pytest
         pip install pytest-cov
         pip install flask
         python -m pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
       displayName: 'Test with pytest'
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: '**/test-*.xml'
+        testRunTitle: 'Publish test results for Python $(python.version)'
+    
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
         
     - task: ArchiveFiles@2
       displayName: 'Archive files'
